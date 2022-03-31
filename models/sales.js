@@ -28,19 +28,9 @@ const getById = async (id) => {
   return sale.map(serialize);
 };
 
-const add = async (productId, quantity) => {
-  const [{ insertId }] = await connection
-    .execute(insertSale, [1, productId, quantity]);
-  return {
-    status: 201,
-    id: insertId,
-    itemsSold: [
-      {
-        productId,
-        quantity,
-      },
-    ],
-  };
+const add = (productId, quantity) => {
+  connection.execute(insertSale, [1, productId, quantity]);
+  return { productId, quantity };
 };
 
 module.exports = {

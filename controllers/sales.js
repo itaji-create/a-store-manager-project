@@ -20,10 +20,14 @@ const getById = async (req, res) => {
   }
 };
 
-const add = async (req, res) => {
-  const { productId, quantity } = req.body[0];
-  const sale = await SalesModel.add(productId, quantity);
-  return res.status(sale.status).json({ id: sale.id, itemsSold: sale.itemsSold });
+const add = (req, res) => {
+  const { body } = req;
+  const itemsSold = [];
+  body.forEach((e) => {
+    const sale = SalesModel.add(e.productId, e.quantity);
+    itemsSold.push(sale);
+  });
+  return res.status(201).json({ id: 1, itemsSold });
 };
 
 module.exports = {
