@@ -20,7 +20,14 @@ const getById = async (req, res) => {
   }
 };
 
+const add = async (req, res) => {
+  const { productId, quantity } = req.body[0];
+  const sale = await SalesModel.add(productId, quantity);
+  return res.status(sale.status).json({ id: sale.id, itemsSold: sale.itemsSold });
+};
+
 module.exports = {
     getAll,
     getById,
+    add,
 };

@@ -28,9 +28,9 @@ const update = async (id, name, quantity) => {
 const deleteById = async (id) => {
   try {
     const exist = await ProductModel.getById(id);
-    if (!exist[0]) return { error: 404, message: 'Product not found' };
+    if (!exist[0]) return { status: 404, message: 'Product not found' };
     ProductModel.deleteById(id);
-    return {};
+    return { status: 204 };
   } catch (error) {
     return error;
   }

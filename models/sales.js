@@ -1,10 +1,14 @@
 const connection = require('./connection');
 
-const getAllProducts = `SELECT sale_id, product_id, quantity, date
+const getAllSales = `SELECT sale_id, product_id, quantity, date
 FROM sales_products
 JOIN sales ON  sales_products.sale_id = sales.id`;
+
 const getPoduct = `SELECT date, product_id, quantity
 FROM sales_products JOIN sales ON sales_products.sale_id = sales.id WHERE sale_id = ?`;
+
+const insertSale = `INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity)
+VALUES (?, ?, ?)`;
 
 const serialize = (saleData) => ({
   saleId: saleData.sale_id,
@@ -14,7 +18,7 @@ const serialize = (saleData) => ({
 });
 
 const getAll = async () => {
-  const [sales] = await connection.execute(getAllProducts);
+  const [sales] = await connection.execute(getAllSales);
 
   return sales.map(serialize);
 };
@@ -24,7 +28,23 @@ const getById = async (id) => {
   return sale.map(serialize);
 };
 
+const add = async (productId, quantity) => {
+  const [{ insertId }] = await connection
+    .execute(insertSale, [1, productId, quantity]);
+  return {
+    status: 201,
+    id: insertId,
+    itemsSold: [
+      {
+        productId,
+        quantity,
+      },
+    ],
+  };
+};
+
 module.exports = {
   getAll,
   getById,
+  add,
 };
