@@ -15,7 +15,7 @@ const getById = async (req, res) => {
   try {
     const productById = await ProductModel.getById(id);
     if (!productById[0]) return res.status(404).json({ message: 'Product not found' });
-    return res.status(201).json(productById[0]);
+    return res.status(200).json(productById[0]);
   } catch (error) {
     res.status(500).json({ message: 'Erro' });
   }
@@ -32,8 +32,21 @@ const add = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  try {
+    const product = await ProductService.update(id, name, quantity);
+    if (product.error) return res.status(product.error).json(product);
+    return res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   add,
+  update,
 };

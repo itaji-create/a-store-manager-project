@@ -4,7 +4,7 @@ const add = async (name, quantity) => {
   try {
     const exist = await ProductModel.getByName(name);
     if (exist[0]) {
-      return { error: 409, message: 'Product already exists' };
+      return { error: 404, message: 'Product already exists' };
     }
 
     const created = await ProductModel.add(name, quantity);
@@ -14,6 +14,18 @@ const add = async (name, quantity) => {
   }
 };
 
+const update = async (id, name, quantity) => {
+  try {
+    const exist = await ProductModel.getById(id);
+    if (!exist[0]) return { error: 404, message: 'Product not found' };
+    ProductModel.update(id, name, quantity);
+    return { id, name, quantity };
+  } catch (error) {
+    return { error: 410, message: error.message };
+  }
+};
+
 module.exports = {
   add,
+  update,
 };

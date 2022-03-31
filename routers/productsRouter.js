@@ -11,6 +11,7 @@ const router = express.Router();
 router
   .get('/', ProductsController.getAll)
   .get('/:id', ProductsController.getById)
-  .post('/', validProductName, validProductQuantity, ProductsController.add);
+  .post('/', validProductName, validProductQuantity, ProductsController.add)
+  .put('/:id', ProductsController.update);
 
 module.exports = router;
