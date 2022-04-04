@@ -33,8 +33,15 @@ const add = (productId, quantity) => {
   return { productId, quantity };
 };
 
+const update = async (id, productId, quantity) => {
+  connection.execute(`UPDATE sales_products
+  SET product_id = ?, quantity = ? WHERE sale_id = ?`, [productId, quantity, id]);
+  return { productId, quantity };
+};
+
 module.exports = {
   getAll,
   getById,
   add,
+  update,
 };

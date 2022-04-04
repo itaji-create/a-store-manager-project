@@ -1,4 +1,5 @@
 const SalesModel = require('../models/sales');
+const SalesServices = require('../services/sales');
 
 const getAll = async (req, res) => {
   try {
@@ -22,16 +23,34 @@ const getById = async (req, res) => {
 
 const add = (req, res) => {
   const { body } = req;
-  const itemsSold = [];
-  body.forEach((e) => {
-    const sale = SalesModel.add(e.productId, e.quantity);
-    itemsSold.push(sale);
-  });
-  return res.status(201).json({ id: 1, itemsSold });
+  try {
+    const itemsSold = [];
+    body.forEach((e) => {
+      const sale = SalesModel.add(e.productId, e.quantity);
+      itemsSold.push(sale);
+    });
+    return res.status(201).json({ id: 1, itemsSold });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  try {
+    const result = { saleId: 1, itemUpdated: [] };
+      const sale = await SalesServices.update(id, body[0].productId, body[0].quantity);
+      result.itemUpdated.push(sale);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
 };
 
 module.exports = {
     getAll,
     getById,
     add,
+    update,
 };
