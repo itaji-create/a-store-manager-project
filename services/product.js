@@ -10,7 +10,7 @@ const add = async (name, quantity) => {
     const created = await ProductModel.add(name, quantity);
     return created;
   } catch (error) {
-    return { error: 400, message: error };
+    return { error: 500, message: error };
   }
 };
 
@@ -21,7 +21,7 @@ const update = async (id, name, quantity) => {
     ProductModel.update(id, name, quantity);
     return { id, name, quantity };
   } catch (error) {
-    return { error: 410, message: error.message };
+    return { error: 510, message: error.message };
   }
 };
 
