@@ -22,7 +22,7 @@ const add = async (name, quantity) => {
 };
 
 const getByName = async (name) => {
-  const [product] = await connection.execute('SELECT * FROM products WHERE name = ?', [name]);
+  const product = await connection.execute('SELECT * FROM products WHERE name = ?', [name]);
   return product;
 };
 

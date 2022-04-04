@@ -4,9 +4,13 @@ const ProductService = require('../../../services/product');
 const sinon = require('sinon');
 
 describe("Products Controller", () => {
-  const fakeProduct = {
-    
-  }
+  describe('', () => {
+  })
+  const fakeProduct = [{
+    id: 1,
+    name: 'produto A',
+    quantity: 10
+  }];
 
   const response = {};
   const request = {};
