@@ -4,7 +4,6 @@ const add = async (name, quantity) => {
   try {
     const exist = await ProductModel.getByName(name);
     if (exist[0]) {
-      console.log(exist);
       return { error: 404, message: 'Product already exists' };
     }
 
