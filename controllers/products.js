@@ -11,8 +11,8 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const productById = await ProductModel.getById(id);
     if (!productById[0]) return res.status(404).json({ message: 'Product not found' });
     return res.status(200).json(productById[0]);
@@ -22,8 +22,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, quantity } = req.body;
   try {
+    const { name, quantity } = req.body;
     const product = await ProductService.add(name, quantity);
     if (product.error) return res.status(409).json(product);
     return res.status(201).json(product);
@@ -33,9 +33,9 @@ const add = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { id } = req.params;
-  const { name, quantity } = req.body;
   try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
     const product = await ProductService.update(id, name, quantity);
     if (product.error) return res.status(product.error).json(product);
     return res.status(200).json(product);
@@ -45,8 +45,8 @@ const update = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const product = await ProductService.deleteById(id);
     return res.status(product.status).json(product);
   } catch (error) {

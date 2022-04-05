@@ -5,11 +5,11 @@ const ProductModel = require('../../../models/products');
 const sinon = require('sinon');
 
 describe("Products Controller", () => {
-  const fakeProduct = [{
+  const fakeProduct = {
     id: 1,
     name: 'produto A',
     quantity: 10
-  }];
+  };
   
   const response = {};
   const request = {};
@@ -26,7 +26,7 @@ describe("Products Controller", () => {
       sinon.stub(ProductModel, 'getAll').resolves(fakeProduct);
     });
     after(() => {
-      ProductController.getAll.restore();
+      ProductModel.getAll.restore();
     });
     it('getAll retornar arrays com sales', async () => {
       await ProductController.getAll(request, response);
@@ -41,22 +41,36 @@ describe("Products Controller", () => {
       ProductService.add.restore();
     });
     it('product criado com sucesso', async () => {
-      await ProductController.add(request, response);
+      ProductController.add(request, response);
 
-      expect(response.json.calledWith(fakeProduct)).to.be.equal(true);
+      expect(response.status.calledWith(201));
     });
   })
-  describe('valida req de buscar produto por id', () => {
+  describe('valida requisição de buscar produto por id', () => {
     before(() => {
-      sinon.stub(ProductModel, 'getById').returns([fakeProduct]);
-    })
+      sinon.stub(ProductModel, 'getById').resolves([fakeProduct]);
+    });
     after(() => {
       ProductModel.getById.restore();
     });
     it('product retornado com sucesso', async () => {
       await ProductController.getById(request, response);
 
-      expect(response.json(fakeProduct)).to.be.equal(true);
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+  });
+  describe('valida requisição de deletar produto', () => {
+    before(() => {
+      sinon.stub(ProductService, 'deleteById').resolves({ status: 204 });
+    });
+    after(() => {
+      ProductService.deleteById.restore(); 
+    });
+    it('product deletado com sucesso', async () => {
+      await ProductController.deleteById(request, response);
+
+      expect(response.status.calledWith(204));
+      expect(response.json.calledWith(fakeProduct))
     })
-  })
-})
+  });
+});

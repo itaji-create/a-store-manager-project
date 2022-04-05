@@ -55,7 +55,20 @@ describe('Sales Controlles', () => {
     it('valida requisição de criar nova sale', async () => {
       await SalesControllers.add(request, response);
 
-      expect(response.json.calledWith(newProduct));
+      expect(response.json.calledWith(newProduct)).to.be.equal(true);
+    });
+  });
+  describe('getById', () => {
+    before(() => {
+      sinon.stub(SalesModel, 'getById').resolves(fakeSales[0]);
+    });
+    after(() => {
+      SalesModel.getById.restore();
+    });
+    it('valida requisição de retornar product by id', async () => {
+      await SalesControllers.getById(request, response);
+
+      expect(response.status.calledWith(200));
     })
-  })
+  });
 })
