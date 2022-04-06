@@ -6,12 +6,15 @@ const update = async (id, productId, quantity) => {
 };
 
 const deleteById = async (id) => {
-  const exist = await SalesModel.getById(id);
-  if (exist[0] === undefined) {
-    return { message: 'Sale not found' };
+  try {
+    const exist = await SalesModel.getById(id);
+    console.log(exist[0]);
+    if (exist[0] === undefined) return { status: 404, content: { message: 'Sale not found' } };
+    SalesModel.deleteById(id);
+    return { status: 204, content: '' };
+  } catch (error) {
+    return error;
   }
-  await SalesModel.deleteById(id);
-  return {};
 };
 
 module.exports = {

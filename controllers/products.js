@@ -48,7 +48,7 @@ const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await ProductService.deleteById(id);
-    return res.status(product.status).json(product);
+    return res.status(product.status).json(product.message);
   } catch (error) {
     return res.status(500).json(error.message);
   }

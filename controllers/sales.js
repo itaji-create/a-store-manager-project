@@ -51,11 +51,10 @@ const update = async (req, res) => {
 const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await SalesServices.deleteById(id);
-    if (result.message) return res.status(404).json({ message: 'Sale not found' }); 
-    return res.status(204).end();
+    const product = await SalesServices.deleteById(id);
+    return res.status(product.status).json(product.content);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(404).json(error.message);
   }
 };
 

@@ -12,16 +12,28 @@ describe('Sales Services', () => {
     productId: 1,
     quantity: 2
   };
-  describe('Retonar todas as sales', () => {
+  describe('GetSale', () => {
     before(() => {
       sinon.stub(SalesModel, 'update').resolves(fakeSale);
     });
     after(() => {
       SalesModel.update.restore();
     });
-    it('verifica se sale services retorna objeto recebido da camada model', async () => {
+    it('verifica se sale update de services retorna objeto recebido da camada model', async () => {
       const result = await SalesServices.update();
       expect(result).to.be.equal(fakeSale);
     })
   });
+  describe('verifica se retorna objeto correto', () => {
+    before(() => {
+      sinon.stub(SalesModel, 'getById').resolves([fakeSale]);
+    });
+    after(() => {
+      SalesModel.getById.restore();
+    });
+    it('retorna objeto vazio apos exclusão ter sido efetivada', async () => {
+      const result = await SalesServices.deleteById(1);
+      expect(result.status).to.be.equal(204);
+    })
+  })
 });
