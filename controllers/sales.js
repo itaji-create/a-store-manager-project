@@ -48,9 +48,21 @@ const update = async (req, res) => {
   }
 };
 
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await SalesServices.deleteById(id);
+    if (result.message) return res.status(404).json({ message: 'Sale not found' }); 
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
     getAll,
     getById,
     add,
     update,
+    deleteById,
 };

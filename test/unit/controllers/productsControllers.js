@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const { expect } = require('chai');
 const ProductController = require('../../../controllers/products');
 const ProductService = require('../../../services/product');
@@ -41,7 +43,7 @@ describe("Products Controller", () => {
       ProductService.add.restore();
     });
     it('product criado com sucesso', async () => {
-      ProductController.add(request, response);
+      await ProductController.add(request, response);
 
       expect(response.status.calledWith(201));
     });

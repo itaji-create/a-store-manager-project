@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const { expect } = require('chai');
 const sinon = require('sinon');
 const SalesControllers = require('../../../controllers/sales');
@@ -55,7 +57,7 @@ describe('Sales Controlles', () => {
     it('valida requisição de criar nova sale', async () => {
       await SalesControllers.add(request, response);
 
-      expect(response.json.calledWith(newProduct)).to.be.equal(true);
+      expect(response.status.calledWith(201));
     });
   });
   describe('getById', () => {

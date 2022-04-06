@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const { expect } = require('chai');
 const ProductsModel = require('../../../models/products');
 const sinon = require('sinon');
@@ -37,8 +39,8 @@ describe('Product Model', () => {
   })
   describe('altera valores de um produto', () => {
     it('retorna produto alterado', async () => {
-      const result = await ProductsModel.update(1, 'produto alterado', 15);
-      expect(result[0].name).to.be.equals('produto alterado')
+      const result = await ProductsModel.update();
+      expect(result).to.be.equals(fakeProduct)
     })
   })
   describe('deleta produto', () => {
