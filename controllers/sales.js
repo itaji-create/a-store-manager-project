@@ -21,14 +21,10 @@ const getById = async (req, res) => {
   }
 };
 
-const add = (req, res) => {
+const add = async (req, res) => {
   try {
     const { body } = req;
-    const itemsSold = [];
-    body.forEach((e) => {
-      const sale = SalesModel.add(e.productId, e.quantity);
-      itemsSold.push(sale);
-    });
+    const itemsSold = await SalesServices.add(body);
     return res.status(201).json({ id: 1, itemsSold });
   } catch (error) {
     return res.status(500).json(error.message);
@@ -54,7 +50,7 @@ const deleteById = async (req, res) => {
     const product = await SalesServices.deleteById(id);
     return res.status(product.status).json(product.content);
   } catch (error) {
-    return res.status(404).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 

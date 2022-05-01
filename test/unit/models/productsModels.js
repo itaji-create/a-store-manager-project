@@ -14,10 +14,10 @@ describe('Product Model', () => {
   const { name, quantity } = fakeProduct;
   before(() => {
     sinon.stub(connection, 'execute').resolves([fakeProduct]);
-  })
+  });
   after(() => {
     connection.execute.restore();
-  })
+  });
   describe('Lista de todos os produtos', () => {
     it('Retorna array com todos os produtos', async () => {
       const result = await ProductsModel.getAll();

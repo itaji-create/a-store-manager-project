@@ -28,20 +28,20 @@ const getById = async (id) => {
   return sale.map(serialize);
 };
 
-const add = (productId, quantity) => {
-  connection.execute(insertSale, [1, productId, quantity]);
-  return { productId, quantity };
+const add = ({ productId, quantity }) => {
+  const result = connection.execute(insertSale, [1, productId, quantity]);
+  return result;
 };
 
 const update = async (id, productId, quantity) => {
-  connection.execute(`UPDATE sales_products
+  await connection.execute(`UPDATE sales_products
   SET product_id = ?, quantity = ? WHERE sale_id = ?`, [productId, quantity, id]);
   return { productId, quantity };
 };
 
 const deleteById = async (id) => {
-  const [sales] = await connection.execute('DELETE FROM sales_products WHERE sale_id = ?', [id]);
-  return sales;
+  await connection.execute('DELETE FROM sales_products WHERE sale_id = ?', [id]);
+  return {};
 };
 
 module.exports = {

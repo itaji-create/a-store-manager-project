@@ -7,11 +7,11 @@ const ProductModel = require('../../../models/products');
 const sinon = require('sinon');
 
 describe("Products Controller", () => {
-  const fakeProduct = {
+  const fakeProduct = [{
     id: 1,
     name: 'produto A',
     quantity: 10
-  };
+  }];
   
   const response = {};
   const request = {};
@@ -32,25 +32,24 @@ describe("Products Controller", () => {
     });
     it('getAll retornar arrays com sales', async () => {
       await ProductController.getAll(request, response);
-      expect(response.json.calledWith(fakeProduct));
+      expect(response.json.calledWith(fakeProduct)).to.be.equal(true);
     });
   });
   describe('valida requisição de criar novo product', () => {
     before(() => {
-      sinon.stub(ProductService, 'add').resolves(fakeProduct);
+      sinon.stub(ProductService, 'add').resolves([fakeProduct]);
     });
     after(() => {
       ProductService.add.restore();
     });
     it('product criado com sucesso', async () => {
-      await ProductController.add(request, response);
-
-      expect(response.status.calledWith(201));
+      const result = await ProductController.add(request, response);
+      expect(response.status.calledWith(201)).to.be.equal(true);
     });
   })
   describe('valida requisição de buscar produto por id', () => {
     before(() => {
-      sinon.stub(ProductModel, 'getById').resolves([fakeProduct]);
+      sinon.stub(ProductModel, 'getById').resolves(fakeProduct);
     });
     after(() => {
       ProductModel.getById.restore();
@@ -71,8 +70,10 @@ describe("Products Controller", () => {
     it('product deletado com sucesso', async () => {
       await ProductController.deleteById(request, response);
 
-      expect(response.status.calledWith(204));
-      expect(response.json.calledWith(fakeProduct))
+      expect(response.status.calledWith(204)).to.be.equal(true);
+      expect(response.json.calledWith(fakeProduct)).to.be.equal(true);
     })
   });
+  describe('valida requisição para editar produto', () => {
+  })
 });

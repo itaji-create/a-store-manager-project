@@ -4,7 +4,7 @@ const ProductService = require('../services/product');
 const getAll = async (req, res) => {
   try {
     const products = await ProductModel.getAll();
-    return res.status(200).json(products).end();
+    return res.status(200).json(products);
   } catch (error) {
     return res.status(500).json({ message: 'Erro no Servidor' });
   }
@@ -48,7 +48,7 @@ const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await ProductService.deleteById(id);
-    return res.status(product.status).json(product.message);
+    return res.status(product.status).json({ message: product.message });
   } catch (error) {
     return res.status(500).json(error.message);
   }

@@ -31,17 +31,18 @@ describe('Sales Controlles', () => {
   });
   describe('getAll', () => {
     before(() => {
-      sinon.stub(SalesModel, 'getAll').resolves(fakeSales);
+      sinon.stub(SalesModel, 'getAll').resolves([fakeSales]);
     });
     after(() => {
       SalesModel.getAll.restore();
     });
     
   })
-  it('retorna array com sales', async () => {
-    await SalesControllers.getAll(request, response);
+  it('retorna array com sales', () => {
+    SalesControllers.getAll(request, response).then(() => {
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
 
-    expect(response.json.calledWith(fakeSales));
   });
   describe('add', () => {
     const newProduct = {
@@ -55,9 +56,9 @@ describe('Sales Controlles', () => {
       SalesModel.add.restore();
     });
     it('valida requisição de criar nova sale', async () => {
-      await SalesControllers.add(request, response);
-
-      expect(response.status.calledWith(201));
+      SalesControllers.add(request, response).then(() => {
+        expect(response.status.calledWith(201)).to.be.equal(true);
+      });
     });
   });
   describe('getById', () => {
@@ -70,7 +71,22 @@ describe('Sales Controlles', () => {
     it('valida requisição de retornar product by id', async () => {
       await SalesControllers.getById(request, response);
 
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    })
+  });
+  describe('update', () => {
+    const fakeSale = { productId: 1, quantity: 10 }
+    before(() => {
+      sinon.stub(SalesServices, 'update').resolves(fakeSale);
+    });
+    after(() => {
+      SalesServices.update.restore();
+    });
+    it('verifica retorno de sale editado', async () => {
+      await SalesControllers.update(request, response);
+
       expect(response.status.calledWith(200));
+      expect(response.json.calledWith(fakeSale)).to.be.equal(true);
     })
   });
 })

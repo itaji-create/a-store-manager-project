@@ -19,8 +19,14 @@ describe('Products Service', () => {
     connection.execute.restore();
   });
   describe('quando tenta criar product', () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById').resolves(true);
+    });
+    after(() => {
+      ProductsModel.getById.restore();
+    });
     it('retorna erro quando tenta criar produto ja existente', async () => {
-      const result = await ProductsService.add('produto A', 10);
+      const result = await ProductsService.add();
       expect(result.message).to.be.equals('Product already exists');
     })
   });
@@ -49,12 +55,24 @@ describe('Products Service', () => {
     })
   });
   describe('quando produto é alterado com sucesso', () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById').resolves(fakeProduct);
+    });
+    after(() => {
+      ProductsModel.getById.restore();
+    });
     it('retorna product alterado', async () => {
       const result = await ProductsService.update(1, 'produto alterado', 20);
       expect(result.name).to.be.equals('produto alterado');
     })
   });
   describe('tenta deletar um produto com id existente', () => {
+    before(() => {
+      sinon.stub(ProductsModel, 'getById').resolves([fakeProduct]);
+    });
+    after(() => {
+      ProductsModel.getById.restore();
+    });
     it('retorna status 204 caso produto tenha sido deletado', async () => {
       const result = await ProductsService.deleteById(1);
       expect(result.status).to.be.equal(204);
@@ -63,7 +81,7 @@ describe('Products Service', () => {
   })
   describe('tenta deletar um produto com id inexistente', () => {
     before(() => {
-      sinon.stub(ProductsModel, 'getById').resolves(false);
+      sinon.stub(ProductsModel, 'getById').resolves([]);
     });
     after(() => {
       ProductsModel.getById.restore();
@@ -71,6 +89,6 @@ describe('Products Service', () => {
     it('retorna erro quando não encontra o id do produto a ser deletado', async () => {
       const result = await ProductsService.deleteById(1);
       expect(result.message).to.be.equal('Product not found');
-    })
-  })
-})
+    });
+  });
+});
