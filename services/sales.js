@@ -1,4 +1,6 @@
 const SalesModel = require('../models/sales');
+const ProductServices = require('./product');
+const ProductModel = require('../models/products');
 
 const update = async (id, productId, quantity) => {
   const sale = await SalesModel.update(id, productId, quantity);
@@ -7,8 +9,13 @@ const update = async (id, productId, quantity) => {
 
 const deleteById = async (id) => {
   try {
-    const exist = await SalesModel.getById(id);
-    if (exist[0] === undefined) return { status: 404, content: { message: 'Sale not found' } };
+    const sales = await SalesModel.getById(id);
+    if (sales[0] === undefined) return { status: 404, content: { message: 'Sale not found' } };
+    sales.forEach(async (e) => {
+      const [product] = await ProductModel.getById(e.productId);
+      const restoreQtd = product.quantity + e.quantity;
+      ProductServices.update(e.productId, product.name, restoreQtd);
+    });
     await SalesModel.deleteById(id);
     return { status: 204 };
   } catch (error) {
@@ -17,8 +24,12 @@ const deleteById = async (id) => {
 };
 
 const add = async (body) => {
-  body.map((e) => SalesModel.add(e));
-  return body;
+  body.forEach(async (e) => {
+    const [product] = await ProductModel.getById(e.productId);
+    SalesModel.add(e);
+    const sub = product.quantity - e.quantity;
+    ProductServices.update(e.productId, product.name, sub);
+  });
 };
 
 module.exports = {
