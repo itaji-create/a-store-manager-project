@@ -24,8 +24,8 @@ const getById = async (req, res) => {
 const add = async (req, res) => {
   try {
     const { body } = req;
-    const itemsSold = await SalesServices.add(body);
-    return res.status(201).json({ id: 1, itemsSold });
+    await SalesServices.add(body);
+    return res.status(201).json({ id: 1, itemsSold: body });
   } catch (error) {
     return res.status(500).json(error.message);
   }

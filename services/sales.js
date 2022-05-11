@@ -28,7 +28,7 @@ const add = async (body) => {
     const [product] = await ProductModel.getById(e.productId);
     SalesModel.add(e);
     const sub = product.quantity - e.quantity;
-    ProductServices.update(e.productId, product.name, sub);
+    await ProductServices.update(e.productId, product.name, sub);
   });
 };
 
